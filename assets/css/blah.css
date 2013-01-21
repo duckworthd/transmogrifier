@@ -1,0 +1,17 @@
+body {
+  positive: relative;
+  padding-top: 50px;
+}
+
+.post-preview td {
+  border: 0;
+}
+
+.post {
+  position: relative;
+}
+
+.post .header-subtext {
+  text-align: right;
+  right: 0px;
+}

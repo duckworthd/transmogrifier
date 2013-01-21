@@ -1,7 +1,20 @@
+# site info
+author: Daniel Duckworth
+url: http://localhost:4000
+
+# # use pandoc for rendering
 markdown: pandoc
 pandoc:
   extensions: [smart, mathjax]
 
+# enable syntax coloring via pygments
 pygments: true
 
-permalink: /:month-:day-:year/:title.html
+# URL for blog posts
+permalink: /blog/:title.html
+
+# automatically update when running server
+# auto: true
+
+# don't deploy these folders/files
+exclude: [Gemfile, Gemfile.lock, README]

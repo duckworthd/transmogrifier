@@ -1,0 +1,22 @@
+---
+layout: default
+title: Blog
+---
+
+<div class="row-fluid">
+  <div class="span8">
+    <h1>Blog Posts</h1>
+    <table class="table table-striped post-preview">
+      {% for post in site.posts %}
+      <td>
+        <a href="{{ post.url }}">{{ post.title }}</a>
+      </td>
+      <td>
+        <span class="subtext">{{ post.subtitle }} </span>
+      </td>
+      <td>
+        <span class="date">{{ post.date | date: "%b %d, %Y" }}</span>
+      </td>
+      {% endfor %}
+  </div>
+<div>

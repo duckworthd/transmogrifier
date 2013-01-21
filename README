@@ -1,0 +1,13 @@
+Setup
+=====
+
+1) install pandoc, a markdown converter that works with LaTeX
+
+    $ sudo port install pandoc
+
+At time of writing this fails to install, so go to
+http://code.google.com/p/pandoc/downloads/list and download a working solution.
+
+2) install ruby dependencies
+
+    $ gem install jekyll pandoc-ruby
