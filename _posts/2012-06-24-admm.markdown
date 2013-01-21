@@ -1,0 +1,114 @@
+---
+comments: true
+layout: post
+title: "ADMM: parallelizing convex optimization"
+subtitle: Stochastic Gradient Descent isn't the only option
+
+---
+
+In the previous post, we considered Stochastic Gradient Descent, a popular method for optimizing "separable" functions (that is, functions that are purely sums of other functions) in a large, distributed environment. However, Stochastic Gradient Descent is not the only algorithm out there.
+
+So why consider anything else? First of all, we have to choose step sizes $\alpha_{t,i}$. While there are theoretical constraints on how it must behave (e.g. $\alpha_t = \frac{1}{t^k}$ is guaranteed to converge), there is a lot of freedom in the constants, and finding just the right one can be painful. It often ends up that even though Stochastic Gradient Descent guarantees an asymptotic convergence rate, you only have enough time to make a handful of passes over the dataset, far too little time for the asymptotics to kick in.
+
+Secondly, Stochastic Gradient Descent is naturally _sequential_. You have to update $w_{t,i}$ before you can update $w_{t,i+1}$ (well, not quite. See [HOGWILD!](http://arxiv.org/abs/1106.5730)). This means that Stochastic Gradient Descent is great for data streaming in one-by-one, but isn't of much help in MapReduce-style frameworks.
+
+Alternating Direction Method of Multipliers (ADMM) is an entirely different method of distributed optimization that is far better oriented for MapReduce and which only requires a single parameter to specify the learning rate. However, using it requires quite a bit more mathematical preparation.
+
+The basic idea is that if we have an optimization problem specified as follows,
+
+$$
+\begin{align}
+  & \min_{x,z} f(x) + g(z)  \\
+  & \text{s.t. } A x + B z = c
+\end{align}
+$$
+
+Then we can derive the Lagrangian and add a quadratic penalty for violating the constraint,
+
+$$
+L_{\rho}(x,z,y) = f(x) + g(z) + y^T (Ax + Bz -c) + \frac{\rho}{2} || Ax + Bz - c ||_2^2
+$$
+
+Finally we apply the following algorithm
+
+1. Optimize over the first primal variable,
+
+$$
+x_{t+1} = \text{argmin}_x L_{\rho}(x,z_t, y_t)
+$$
+
+2. Optimize over the second primal variable,
+
+$$
+z_{t+1} = \text{argmin}_x L_{\rho}(x_{t+1},z, y_t)
+$$
+
+3. Take a gradient step for the dual variable
+
+$$
+y_{t+1} = y_t + \rho (A x_{t+1} + B z_{t+1} - c)
+$$
+
+Notice the choice of step size for updating $y_t$ and the addition of a quadratic term to the Lagrangian; these are the critical addition of ADMM.
+
+The question now becomes, how can we apply this seemingly restricted method to make a distributed algorithm? Suppose we want to minimize our usual separable function
+
+$$
+\min_x \sum_i f_i(x)
+$$
+
+We can reformulate this problem by giving each $f_i$ its own $x_i$, and requiring that $x_i = z$ at the very end.
+
+$$
+\begin{align}
+  & \min_{x_i, z} \sum_i f_i(x_i)   \\
+  & \text{s.t.} \quad \forall i \quad x_i = z
+\end{align}
+$$
+
+This means that we can optimize each $x_i$ independently, then aggregate their solutions to update $z$ (the one true $x$), and finally use both of those to update $y$. Let's see how this works out exactly. The augmented Lagrangian would be,
+
+$$
+L_{\rho}(x,z,y) = \sum_{i} \left( 
+    f_i(x_i) + y^T (x_i - z) + \frac{\rho}{2} || x_i - z ||_2^2
+  \right)
+$$
+
+1. For each machine $i$ in parallel, optimize the local variable $x_i$
+
+$$
+\begin{align}
+  x_{t+1, i} & = \text{argmin}_x f_i(x) 
+    + y_{t,i}^T (x - z_t) 
+    + \frac{\rho}{2} (x-z)^T (x-z) \\
+\end{align}
+$$
+
+2. Aggregate the resulting $x_{t,i+1}$ and optimize the global variable $z$,
+
+$$
+\begin{align}
+  z_{t+1} &= \text{argmin}_z y_{t,i}^T (x_{t+1, i} - z) 
+    + \frac{\rho}{2} (x_{t+1, i} - z)^T (x_{t+1, i} - z)  \\
+  &= \frac{1}{N} \sum_{i=1}^{N} \left( 
+    x_{t+1, i} + \frac{1}{\rho} y_{t, i}
+  \right)
+\end{align}
+$$
+
+3. Update the dual variables $y_{t,i}$,
+
+$$
+y_{t+1, i} = y_{t, i} + \rho ( x_{t+1,i} - z_{t+1} )
+$$
+
+This is already pretty cool, but there's even more. It ends up that ADMM works splendidly even when we add a regularization penalty to the primal problem, such as the $L_2$ or $L_1$ norm. You can find out all of these cool things and more in the Stephen Boyd's [paper](http://www.stanford.edu/~boyd/papers/pdf/admm_distr_stats.pdf) and [lecture](http://videolectures.net/nipsworkshops2011_boyd_multipliers/).
+
+On a final note, the proofs on convergence for ADMM are currently not as complete as those for other methods like Stochastic Gradient Descent. While it is known that the dual variable $y_t$ will converge as long as $f$ and $g$ are convex and a solution exists, we can only prove convergence of the primal variables $x_t$ and $z_t$ if they are constrained to lie in a polyhedron at this point in time.
+
+References
+
+- [Distributed Optimization and Statistical Learning via the Alternating Direction Method of Multipliers](http://www.stanford.edu/~boyd/papers/pdf/admm_distr_stats.pdf)
+- [A Proof of Convergence For the Alternating Direction Method of Multipliers Applied to Polyhedral-Constrained Functions](http://arxiv.org/pdf/1112.2295.pdf)
+- [HOGWILD!: A Lock-Free Approach to Parallelizing Stochastic Gradient Descent](http://arxiv.org/abs/1106.5730)
+- [Alternating Direction Method of Multipliers](http://videolectures.net/nipsworkshops2011_boyd_multipliers/)

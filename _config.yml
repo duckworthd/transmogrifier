@@ -1,6 +1,6 @@
 # site info
 author: Daniel Duckworth
-url: http://localhost:4000
+url: http://www.transmogrifier.com
 
 # # use pandoc for rendering
 markdown: pandoc

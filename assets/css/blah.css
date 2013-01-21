@@ -3,12 +3,33 @@ body {
   padding-top: 50px;
 }
 
-.post-preview td {
-  border: 0;
+.post-preview {
+  list-style-type: none;
+}
+
+.post-preview .date {
+  float: left;
+  width: 12%;
+  font-family: Monaco, "Courier New", monospace;
+  font-size: smaller;
+}
+
+.post-preview .title {
+  float: left;
+  width: 40%;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .post {
   position: relative;
+}
+
+.box-shadow {
+  box-shadow: 2px 2px 8px #aaa;
+  background: white;
+  padding: 1em 3em 1em 3em;
+  border: 1px;
 }
 
 .post .header-subtext {
