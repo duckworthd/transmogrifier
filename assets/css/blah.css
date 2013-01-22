@@ -1,7 +1,33 @@
 body {
   positive: relative;
-  padding-top: 50px;
+  padding-top: 75px;
+  background-color: #eee;
+  text-align: justify;
 }
+
+.box-shadow {
+  box-shadow: 2px 2px 8px #aaa;
+  background: white;
+  padding: 1em 3em 1em 3em;
+  margin-bottom: 10px;
+}
+
+/**************************** navbar.html *************************************/
+
+/* TODO vertically center text in navbar */
+.navbar .logo img {
+  height: 40px;
+}
+
+.navbar ul.nav li {
+  line-height: 40px;
+}
+
+.navbar-search {
+  margin-top: 12.5px;
+}
+
+/**************************** blog.html ***************************************/
 
 .post-preview {
   list-style-type: none;
@@ -21,18 +47,81 @@ body {
   padding-right: 10px;
 }
 
+/**************************** posts *******************************************/
+
 .post {
   position: relative;
 }
 
-.box-shadow {
-  box-shadow: 2px 2px 8px #aaa;
-  background: white;
-  padding: 1em 3em 1em 3em;
-  border: 1px;
+.post header h1 {
+  font-size: 200%;
+  text-align: center;
 }
 
 .post .header-subtext {
   text-align: right;
   right: 0px;
+}
+
+/**************************** project.html ************************************/
+
+.project {
+  margin-top: 10px;
+}
+
+.project h1  {
+  font-size: 150%;
+  text-align: center;
+}
+
+.project .logo {
+  margin-left: auto;
+  margin-right: auto;
+  width: 66%;
+  display: block;
+}
+
+.project img {
+  width: 100%;
+}
+
+.project p {
+  height: 150px;
+}
+
+/**************************** about.html **************************************/
+
+.hero-unit {
+  background: url('/assets/img/transmogrifier.png');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  height: 150px;
+}
+
+.hero-unit h1 {
+  text-align: center;
+  font-size: 500%;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  line-height: 150px;
+}
+
+.contact-info .row-fluid {
+  height: 15px;
+  margin: 10px;
+}
+
+.contact-info .method {
+  float: left;
+  width: 30px;
+}
+
+.contact-info .method-inner {
+  width: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-info .method img {
+  max-height: 100%;
+  max-width: 100%;
 }
