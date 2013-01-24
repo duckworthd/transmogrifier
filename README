@@ -1,3 +1,13 @@
+Jekyll for Scientists
+=====================
+
+Jekyll does a pretty good job getting your blog up and running, but its default
+settings aren't so great for scientists (LaTeX, anyone?). This project contains
+a skeleton of my blog with everything you need to get Jekyll running with
+MathJAX (Javascript LaTeX interpreter), LightBox2 (pretty modals for images),
+and Twitter Bootstrap.
+
+
 Setup
 =====
 
@@ -11,3 +21,11 @@ http://code.google.com/p/pandoc/downloads/list and download a working solution.
 2) install ruby dependencies
 
     $ gem install jekyll pandoc-ruby
+
+3) start up a local server
+
+    $ jekyll --server --auto
+
+4) open up a browser
+
+    $ open locahost:4000

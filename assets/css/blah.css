@@ -23,6 +23,10 @@ body {
   line-height: 40px;
 }
 
+.navbar img {
+  height: 15px;
+}
+
 .navbar-search {
   margin-top: 12.5px;
 }
@@ -63,6 +67,20 @@ body {
   right: 0px;
 }
 
+.post article h1 {
+  font-size: 150%;
+}
+
+.img-center {
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.img-center img {
+  max-width: 100%;
+}
+
 /**************************** project.html ************************************/
 
 .project {
@@ -75,14 +93,15 @@ body {
 }
 
 .project .logo {
-  margin-left: auto;
-  margin-right: auto;
-  width: 66%;
-  display: block;
+  height: 150px;
 }
 
 .project img {
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .project p {
