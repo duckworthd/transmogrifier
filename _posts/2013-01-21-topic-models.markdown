@@ -169,4 +169,3 @@ for d = 1:n_documents
 end
 
 {% endhighlight %}
-
