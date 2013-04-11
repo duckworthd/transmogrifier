@@ -8,7 +8,7 @@ subtitle: wut.
 
   Not far from [Gradient Descent][gradient_descent] is another first-order
 descent algorithm (that is, an algorithm that only relies on the first
-derivative) is Subgradient Descent. In implementation, they are in fact look
+derivative) is Subgradient Descent. In implementation, they are in fact
 identical. The only difference is on the assumptions placed on the objective
 function we wish to minimize, $f(x)$.  If you were to follow the Subgradient
 Descent algorithm to walk down a mountain, it would look something like this
