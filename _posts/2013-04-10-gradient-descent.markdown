@@ -7,13 +7,13 @@ subtitle: wut.
 ---
 
   Gradient Descent is perhaps the most intuitive of all optimization
-algorithms. Suppose you're standing on the side of a mountain and want to reach
+algorithms. Imagine you're standing on the side of a mountain and want to reach
 the bottom. You'd probably do something like this,
 
-<div class="well well-small">
+<pre>
   1. Look around you and see which way points the most downwards
   2. Take a step in that direction
-</div>
+</pre>
 
   Well that's Gradient Descent!
 
@@ -285,6 +285,7 @@ def gradient_descent(gradient, x0, alpha, n_iterations=100):
     xs.append(x_plus)
   return xs
 
+# This generates the plots that appear above
 if __name__ == '__main__':
   import os
 

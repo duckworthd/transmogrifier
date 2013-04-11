@@ -12,6 +12,16 @@ body {
   margin-bottom: 10px;
 }
 
+/** slow transitioning links **/
+a {
+  transition: .5s;
+}
+
+a:hover {
+  color: DeepSkyBlue;
+  text-decoration: none;
+}
+
 /**************************** navbar.html *************************************/
 
 /* TODO vertically center text in navbar */
@@ -39,19 +49,16 @@ body {
 }
 
 .post-preview .date {
-  float: right;
+  float: left;
   font-family: Monaco, "Courier New", monospace;
   font-size: smaller;
+  margin: 0 1.5em 0 0;
 }
 
 .post-preview .title {
   float: left;
   padding-left: 10px;
   padding-right: 10px;
-}
-
-.post-preview .title h1 {
-  font-size: large;
 }
 
 .post-preview .subtext {
@@ -76,6 +83,9 @@ body {
 
 .post article h1 {
   font-size: 150%;
+  border-width: 1px 0 1px 0;
+  border-style: solid;
+  border-color: rgba(0,0,0,0.3);
 }
 
 .img-center {
