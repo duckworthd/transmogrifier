@@ -12,7 +12,7 @@ the bottom. You'd probably do something like this,
 
 <div class="well">
   1. Look around you and see which way points the most downwards
-  2. Take a step in that direction
+  2. Take a step in that direction, then repeat
 </div>
 
   Well that's Gradient Descent!
@@ -60,6 +60,7 @@ simply $\frac{1}{t}$.
 A Small Example
 ===============
 
+  <a id="example"></a>
   Let's look at Gradient Descent in action. We'll use the objective function
 $f(x) = x^4$, meaning that $\nabla_x f(x) = 4 x^3$. For a step size, we'll
 choose a constant step size $\alpha_t = 0.05$. Finally, we'll start at $x^{(0)}
