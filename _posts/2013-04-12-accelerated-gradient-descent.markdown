@@ -366,12 +366,11 @@ class BacktrackingLineSearch(object):
       a *= 0.99
     return a
 
-
 if __name__ == '__main__':
   import os
 
   import numpy as np
-  import pylab as pl
+  import yannopt.plotting as plotting
 
   ### ACCELERATED GRADIENT ###
 
@@ -385,21 +384,11 @@ if __name__ == '__main__':
   # run gradient descent
   iterates = accelerated_gradient(gradient, x0, alpha, n_iterations=n_iterations)
 
-  # plot iteration number vs. objective function evaluated at that iteration
-  pl.plot(range(len(iterates)), function(np.array(iterates)), 'o')
-  pl.plot(range(len(iterates)), function(np.array(iterates)), '--', alpha=0.2)
-  pl.xlabel('iteration')
-  pl.ylabel('value of objective function')
-  pl.savefig('figures/convergence.png')
-  pl.close()
+  ### PLOTTING ###
 
-  # plot the iterate vs. the objective value
-  pl.figure()
-  pl.plot(np.linspace(0, 1.1, 100), function(np.linspace(0, 1.1, 100)), alpha=0.2)
-  pl.scatter(iterates, function(np.array(iterates)), c=np.linspace(0.2, 0.8, len(iterates)))
-  pl.xlabel('iterates')
-  pl.ylabel('objective function evaluated at iterates')
-  pl.savefig('figures/iterates.png')
-  pl.close()
+  plotting.plot_iterates_vs_function(iterates, function,
+                                     path='figures/iterates.png', y_star=0.0)
+  plotting.plot_iteration_vs_function(iterates, function,
+                                      path='figures/convergence.png', y_star=0.0)
 
 {% endhighlight %}
