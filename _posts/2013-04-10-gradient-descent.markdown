@@ -57,10 +57,11 @@ $$
 $\alpha^{(t)}$ can be selected by [Line Search](#line_search), a small constant, or
 simply $\frac{1}{t}$.
 
+<a id="example"></a>
+
 A Small Example
 ===============
 
-  <a id="example"></a>
   Let's look at Gradient Descent in action. We'll use the objective function
 $f(x) = x^4$, meaning that $\nabla_x f(x) = 4 x^3$. For a step size, we'll
 choose a constant step size $\alpha_t = 0.05$. Finally, we'll start at $x^{(0)}
@@ -90,6 +91,8 @@ choose a constant step size $\alpha_t = 0.05$. Finally, we'll start at $x^{(0)}
     those points. More red indicates a higher iteration number.
   </span>
 </div>
+
+<a id="proof"></a>
 
 Why does it work?
 =================
@@ -192,6 +195,8 @@ $$
 f(x^{*}) \le \epsilon$, we need $O(\frac{1}{\epsilon})$ iterations.  In other
 words, Gradient Descent has a "convergence rate" of $O(\frac{1}{T})$.
 
+
+<a id="usage"></a>
 
 When should I use it?
 =====================

@@ -68,6 +68,8 @@ Descent is
 must be selected more carefully than in Gradient Descent. A common choice is
 $\frac{1}{t}$.
 
+<a id="example"></a>
+
 A Small Example
 ===============
 
@@ -92,6 +94,8 @@ We'll use the [Polyak Step Size](#polyak) and initialize with $x^{(0)} = 0.75$.
   </span>
 </div>
 
+
+<a id="proof"></a>
 
 Why does it work?
 =================
@@ -259,6 +263,7 @@ pretty bad!
 When should I use it?
 =====================
 
+  <a id="usage"></a>
   As the implementation of Gradient Descent and Subgradient Descent are
 essentially the same, ease of use is always the first reason to use Subgradient
 Descent. Similarly, Subgradient Descent requires a minimal memory footprint,

@@ -77,13 +77,15 @@ Gradient Descent.
 </div>
 
 
+<a id="proof"></a>
+
 Why does it work?
 =================
 
   The assumptions for the Accelerated Gradient Method are identical to Gradient
 Descent's. In particular, we assume,
 
-1. $f$ is convex and finite for all $x$
+1. $f$ is convex, differentiable, and finite for all $x$
 2. a finite solution $x^{*}$ exists
 3. $\nabla f(x)$ is Lipschitz continuous with constant $L$. That is, there must
    be an $L$ such that,
@@ -275,6 +277,8 @@ $$
   Thus, the convergence rate of the Accelerated Gradient Method is
 $O(\frac{1}{\sqrt{\epsilon}})$. Woo!
 
+
+<a id="usage"></a>
 
 When should I use it?
 =====================
