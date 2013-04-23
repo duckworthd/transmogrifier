@@ -37,7 +37,7 @@ Gradient Descent even when optimizing non-differentiable objective functions.
 How does it work?
 =================
 
-<div class="well">
+<div class="pseudocode">
   **Input**: initial iterate $x^{(0)}$
 
   1. For $t = 0, 1, 2, \ldots$
@@ -356,7 +356,7 @@ $$
   In other words, we can perform Backtracking Line Search for Proximal Gradient Descent as follows,
 
 
-<div class="well">
+<div class="pseudocode">
   **Input**: iterate $x^{(t)}$, initial step size $\alpha_0$, step factor $\beta$
 
   1. $\alpha = \alpha_0$
@@ -506,8 +506,8 @@ if __name__ == '__main__':
   ### PLOTTING ###
 
   plotting.plot_iterates_vs_function(iterates, function,
-                                     path='figures/iterates.png', y_star=0.0)
+                                     path='figures/iterates.png')
   plotting.plot_iteration_vs_function(iterates, function,
-                                      path='figures/convergence.png', y_star=0.0)
+                                      path='figures/convergence.png')
 
 {% endhighlight %}

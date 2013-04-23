@@ -13,7 +13,7 @@ identical. The only difference is on the assumptions placed on the objective
 function we wish to minimize, $f(x)$.  If you were to follow the Subgradient
 Descent algorithm to walk down a mountain, it would look something like this,
 
-<div class="well">
+<div class="pseudocode">
   1. Look around you and see which way points the most downwards. If there
      are multiple directions that are equally downwards, just pick one.
   2. Take a step in that direction. Then repeat.
@@ -55,7 +55,7 @@ Descent is
   </span>
 </div>
 
-<div class="well">
+<div class="pseudocode">
   **Input**: initial iterate $x^{(0)}$
 
   1. For $t = 0, 1, \ldots$

@@ -18,7 +18,7 @@ that you are standing on the side of a mountain and want to reach the bottom.
 If you were to follow the Accelerated Gradient Method, you'd do something like
 this,
 
-<div class="well">
+<div class="pseudocode">
   1. Look around you and see which way points the most dowards
   2. Take a step in that direction
   3. Take another step in that direction, even if it starts taking you uphill.
@@ -41,7 +41,7 @@ $$
 can easily compute its gradient $\nabla f(x)$. Then the Accelerated Gradient
 Method is defined as,
 
-<div class="well">
+<div class="pseudocode">
   **Input**: initial iterate $y^{(0)}$
 
   1. For $t = 1, 2, \ldots$

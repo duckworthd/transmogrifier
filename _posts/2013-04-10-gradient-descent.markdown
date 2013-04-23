@@ -10,7 +10,7 @@ subtitle: wut.
 algorithms. Imagine you're standing on the side of a mountain and want to reach
 the bottom. You'd probably do something like this,
 
-<div class="well">
+<div class="pseudocode">
   1. Look around you and see which way points the most downwards
   2. Take a step in that direction, then repeat
 </div>
@@ -43,7 +43,7 @@ $$
 
 
   <!-- TODO Replace well with something more contextually meaningful -->
-<div class="well">
+<div class="pseudocode">
   **Input**: initial iterate $x^{(0)}$
 
   1. For $t = 0, 1, \ldots$
