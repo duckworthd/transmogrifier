@@ -201,7 +201,7 @@ the following problem,
 
 $$
 \begin{align*}
-  & \underset{\lambda_k}{\min}  & & \frac{1}{2} (\Delta_{k_1} + \Delta_{k_2})
+  & \underset{\lambda_k}{\min}  & & \frac{1}{2} (||\Delta_{k_1}||_2^2 + ||\Delta_{k_2}||_2^2)
                                     + \lambda_k^T (x_{k_1} - x_{k_2}) \\
   & \text{subject to}         & & ||\lambda_k||_{p^{*}} \le \gamma w_k \\
   &                           & & \Delta_{k_1} = \sum_{l: l_1 = k_1} \lambda_l - \sum_{l : l_2 = k_1} \lambda_l \\
@@ -269,7 +269,25 @@ duality gap to determine when we are converged.
 Performance
 ===========
 
-  TODO compare again previous methods
+  TODO compare again previous methods.
+
+Conclusion
+==========
+
+  In this post, I introduced a coordinate ascent algorithm for convex
+clustering. Empirically, the algorithm is quite quick, but it doesn't share the
+parallelizability or convergence proofs of its siblings, ADMM and AMA. However,
+coordinate descent has an upside: there are no parameters to tune, and every
+iteration is guaranteed to improve the objective function. Within each
+iteration, updates are quick asymptotically and empirically.
+
+  Unfortunately, like all algorithms based on the dual for this particular
+problem, the biggest burden is on memory. Whereas the primal formulation
+requires the number of variables grow linearly with the number of data points,
+the dual formulation can grow as high as quadratically. In addition, the primal
+variables allow for centers to be merged, allowing for potential space-savings
+as the algorithm is running. The dual seems to lack this property, requiring
+all dual variables to be fully instantiated.
 
 References
 ==========
