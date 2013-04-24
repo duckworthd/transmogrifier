@@ -2,7 +2,7 @@
 name: Transmogrifier
 description: Changing for the better.
 author: Daniel Duckworth
-url: http://www.transmogrifier.com
+url: http://stronglyconvex.com
 
 # # use pandoc for rendering
 markdown: pandoc
