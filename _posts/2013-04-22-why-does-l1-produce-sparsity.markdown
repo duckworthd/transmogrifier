@@ -51,8 +51,8 @@ otherwise. If the resulting learned weights $w^{*}$ has only a few non-zero
 entries, we might believe that those are the most indicative words in deciding
 sentiment.
 
-How does it work?
-=================
+Non-smooth Regularizers and their Solutions
+===========================================
 
   We now come to the 100 million question: why do regularizers like the 1-norm
 lead to sparse solutions? At some point someone probably told you "they're our
@@ -96,7 +96,7 @@ true?
 
   **Dual Norms** Since we're primarily concerned with $\Omega(x) = ||x||_1$,
 let's plug that in. In the following, it'll actually be easier to prove things
-about any norm, so we'll drop the 1 from here on out.
+about any norm, so we'll drop the 1 for the rest of this section.
 
   Recal the definition of a dual norm. In particular, the dual norm of a norm
 $||\cdot||$ is defined as,
@@ -115,7 +115,11 @@ $$
 to keep in mind is that if we take the gradient of an expression of the form
 $\sup_{y} g(y, x)$, then its gradient with respect to x is $\nabla_x g(y^{*},
 x)$ where $y^{*}$ is any $y$ that achieves the $\sup$. Since $g(y, x) = y^{T}
-x$, that means $\nabla_x g(y, x) = y^{*}$
+x$, that means,
+
+$$
+  \nabla_x \sup_{y} g(y, x) = \nabla_x \left( (y^{*})^T x \right) = y^{*} = \arg\max_{||y||_{*} \le 1} y^{T} x
+$$
 
 $$
   \partial ||x|| = \{ y^{*} :  y^{*} = \arg\max_{||y||_{*} \le 1} y^{T} x \}
@@ -134,18 +138,78 @@ $$
 established that $-\frac{1}{\lambda} \nabla f(x)$ is in $\partial ||x||$ for $x
 = 0$. In other words, $x^{*} = 0$ solves the original problem!
 
+Onto Coordinate-wise Sparsity
+=============================
+
+  We've just established that $||\frac{1}{\lambda} \nabla f(0)||_{*} \le 1$
+implies $x^{*} = 0$, but we don't want all of $x^{*}$ to be 0, we want *some
+coordinates* of $x^{*}$ to be 0. How can we take what we just concluded and
+apply it only a subvector of $x^{*}$?
+
+  Rather than a general norm, let's return once again to the $L_1$ norm. The
+$L_1$ norm has a very special property that will be of use here:
+separability. In words, this means that the $L_1$ norm can be expressed as a
+sum of functions over $x$'s individual coordinates, each independent of every
+other. In particular, $||x||_1 = \sum_{i} |x_{i}|$.  It's easy to see that the
+function $\Omega_i(x) = |x_i|$ is independent of the rest of $x$'s elements.
+
+  Let's take another look at our objective function,
+
+$$
+\begin{align*}
+  \min_{x} f(x) + \lambda ||x||_1
+  & = \min_{x_i} \left( \min_{x_{-i}} f(x_i, x_{-i}) + \lambda \sum_{j} |x_j| \right) \\
+  & = \min_{x_i} g(x_i) + \lambda |x_i|
+\end{align*}
+$$
+
+  where $x_{-i}$ is all coordinates of $x$ except $x_i$ and $g(x_i) =
+\min_{x_{-i}} f(x_i, x_{-i}) + \lambda \sum_{j \ne i} |x_j|$. Taking the
+derivative of $g(x_i)$ with respect to $x_i$, we again require that,
+
+$$
+\begin{align*}
+  0 &\in \nabla_{x_i} g(x_i) + \lambda \partial |x_i| \\
+  -\frac{1}{\lambda} \nabla_{x_i} g(x_i) & \in \partial |x_i| \\
+  -\frac{1}{\lambda} \nabla_{x_i} f(x_i, x_{-i}^{*}) & \in \partial |x_i|
+\end{align*}
+$$
+
+  Hmm, that looks familiar. And isn't $|x_i| = ||x_i||_1$? That means that if
+
+$$
+  \left| \left| \frac{1}{\lambda} \nabla_{x_i} f(x_i, x_{-i}^{*}) \right| \right|_{\infty}
+  = \left| \frac{1}{\lambda} \nabla_{x_i} f(x_i, x_{-i}^{*}) \right| \le 1
+$$
+
+  when $x_i = 0$, then $x_i^{*} = 0$. In other words, given the optimal values
+for all coordinates other than $i$, we can evaluate the derivative of
+$\frac{1}{\lambda} f$ with respect to $x_i$ and check if the absolute value
+of that is less than 1. If it is, then $x_i = 0$ is optimal!
+
 Conclusion
 ==========
 
-  In the previous section, we showed that in order to solve the problem
+  In the first section, we showed that in order to solve the problem
 $\min_{x} f(x) + \lambda \Omega(x)$, it is necessary that $-\frac{1}{\lambda}
 \nabla f(x^{*}) \in \partial \Omega(x^{*})$. If $\Omega(x^{*})$ is
 differentiable at $x^{*}$, then there can be only 1 possible choice for
 $x^{*}$, but in all other cases there are a multitude of potential solutions.
-When we are particularly concerned with sparse solutions and when $\Omega(x)$
-isn't differentiable at $x = 0$, there is a set of values which
-$-\frac{1}{\lambda} \nabla f(x^{*})$ can take on such that $x^{*} = 0$ is still
-an optimal solution. This is why $\Omega(x) = ||x||_1$ leads to sparsification.
+When $\Omega(x)$ isn't differentiable at $x = 0$, there is a non-singleton set
+of values which $-\frac{1}{\lambda} \nabla f(x^{*})$ can be in such that $x^{*}
+= 0$ is still an optimal solution. If $\Omega(x) = ||x||$, then a sufficient
+condition for $x^{*} = 0$ to be optimal is $||\frac{1}{\lambda} \nabla
+f(x)||_{*} \le 1$ at $x = 0$.
+
+  In the next section, we showed that in the special case of the $L_1$ norm, we
+can express the norm as the sum of $L_1$ norms applied to $x$'s individual
+coordinates. Because of this, we can rewrite the original optimization problem
+as $\min_{x_i} g(x_i) + \lambda ||x_i||_1$ where $g(x_i) = \min_{x_{-i}} f(x_i,
+x_{-i}) + \lambda ||x_{-i}||_1$. Using the same results from the previous
+section, we showed that as long as $|\frac{1}{\lambda} \nabla_{x_i} f(x_i,
+x_{-i}^{*})| \le 1$, then $x_i^{*} = 0$ is an optimal choice. In other words,
+we established conditions upon which a coordinate will be 0. This is why the
+$L_1$ norm causes sparsity.
 
 References
 ==========
