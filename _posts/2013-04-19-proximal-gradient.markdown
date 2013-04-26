@@ -45,6 +45,8 @@ How does it work?
     3. if converged, return $x^{(t+1)}$
 </div>
 
+<a id="intuition"></a>
+
 Intuition for the $\prox$ Operator
 ==================================
 
@@ -506,8 +508,10 @@ if __name__ == '__main__':
   ### PLOTTING ###
 
   plotting.plot_iterates_vs_function(iterates, function,
-                                     path='figures/iterates.png')
+                                     path='figures/iterates.png',
+                                     y_star=0.69314718055994529)
   plotting.plot_iteration_vs_function(iterates, function,
-                                      path='figures/convergence.png')
+                                      path='figures/convergence.png',
+                                      y_star=0.69314718055994529)
 
 {% endhighlight %}

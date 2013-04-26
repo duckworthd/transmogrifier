@@ -1,7 +1,7 @@
 ---
 comments: true
 layout: post
-title: Why does \(L_1\) regularization produce sparse solution?
+title: Why does \(L_1\) regularization produce sparse solutions?
 subtitle: wut.
 
 ---
@@ -54,11 +54,11 @@ sentiment.
 Non-smooth Regularizers and their Solutions
 ===========================================
 
-  We now come to the 100 million question: why do regularizers like the 1-norm
+  We now come to the \$ 100 million question: why do regularizers like the 1-norm
 lead to sparse solutions? At some point someone probably told you "they're our
 best convex approximation to $\ell_0$ norm," but there's a better reason than
 that.  In fact, I claim that any regularizer that is non-differentiable at $w_i
-= 0$ can lead to sparse solutions.
+= 0$ and can be decomposed into a sum can lead to sparse solutions.
 
   **Intuition** The intuition lies in the idea of subgradients. Recall that the
 subgradient of a (convex) function $\Omega$ at $x$ is any vector $v$ such that,
@@ -134,9 +134,9 @@ $$
   -\frac{1}{\lambda} \nabla f(x) \in \partial ||x||
 $$
 
-  If $||-\frac{1}{\lambda} \nabla f(x)||_{*} \le 1$, then we've already
-established that $-\frac{1}{\lambda} \nabla f(x)$ is in $\partial ||x||$ for $x
-= 0$. In other words, $x^{*} = 0$ solves the original problem!
+  If $||-\frac{1}{\lambda} \nabla f(x)||_{*} \le 1$ when $x=0, then we've already
+established that $-\frac{1}{\lambda} \nabla f(0)$ is in $\partial ||0||$. In
+other words, $x^{*} = 0$ solves the original problem!
 
 Onto Coordinate-wise Sparsity
 =============================
@@ -197,7 +197,7 @@ differentiable at $x^{*}$, then there can be only 1 possible choice for
 $x^{*}$, but in all other cases there are a multitude of potential solutions.
 When $\Omega(x)$ isn't differentiable at $x = 0$, there is a non-singleton set
 of values which $-\frac{1}{\lambda} \nabla f(x^{*})$ can be in such that $x^{*}
-= 0$ is still an optimal solution. If $\Omega(x) = ||x||$, then a sufficient
+= 0$ is an optimal solution. If $\Omega(x) = ||x||$, then a sufficient
 condition for $x^{*} = 0$ to be optimal is $||\frac{1}{\lambda} \nabla
 f(x)||_{*} \le 1$ at $x = 0$.
 
@@ -207,9 +207,9 @@ coordinates. Because of this, we can rewrite the original optimization problem
 as $\min_{x_i} g(x_i) + \lambda ||x_i||_1$ where $g(x_i) = \min_{x_{-i}} f(x_i,
 x_{-i}) + \lambda ||x_{-i}||_1$. Using the same results from the previous
 section, we showed that as long as $|\frac{1}{\lambda} \nabla_{x_i} f(x_i,
-x_{-i}^{*})| \le 1$, then $x_i^{*} = 0$ is an optimal choice. In other words,
-we established conditions upon which a coordinate will be 0. This is why the
-$L_1$ norm causes sparsity.
+x_{-i}^{*})| \le 1$ when $x_i = 0$, then $x_i^{*} = 0$ is an optimal choice. In
+other words, we established conditions upon which a coordinate will be 0. This
+is why the $L_1$ norm causes sparsity.
 
 References
 ==========
