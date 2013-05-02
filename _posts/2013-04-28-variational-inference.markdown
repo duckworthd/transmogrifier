@@ -28,8 +28,8 @@ $$
   Looking at this formulation, the first thing you should be thinking is, "We
 don't even know how to calculate $P(z|x)$ much less take an expectation with
 respect to it. How can I possibly solve this problem?" The key is to restrict
-$q(z|\eta)$ to decompose into a product of independent distributions, 1 per
-for each hidden variable $z_i$. In other words,
+$q(z|\eta)$ to decompose into a product of independent distributions, 1 for
+each hidden variable $z_i$. In other words,
 
 $$
   q(z|\eta) = \prod_{i} q(z_i | \eta_i)
@@ -373,8 +373,8 @@ _is_ Gradient Ascent with step size equal to 1. Actually, that's only half true
 -- it's Gradient Ascent using a "Natural Gradient" (rather than the usual
 gradient defined with respect to $||\cdot||_2^2$).
 
-  First, recall the Gradient Ascent update for $\eta_k$ (we use
-the definition of $\nabla_{\eta_k} L(\eta_k)$ we found when deriving the
+  **Gradient Ascent** First, recall the Gradient Ascent update for $\eta_k$ (we
+use the definition of $\nabla_{\eta_k} L(\eta_k)$ we found when deriving the
 Coordinate Ascent update).
 
 $$
@@ -391,10 +391,19 @@ $$
 \end{align*}
 $$
 
-  Hmm, that $\nabla_{\eta_k}^2 A(\eta_k^{(t)})$ term is a bit odd. Where did it
-come from, and is there any way to make it just go away? First, notice that we
-can define the gradient of $L$ by the solution to the following optimization
-problem as $\epsilon \rightarrow 0$,
+  **Natural Gradient** Hmm, that $\nabla_{\eta_k}^2 A(\eta_k^{(t)})$ term is a
+bit of a nuisance. Is there any way to make it just go away? In fact, we can --
+by replacing the concept of a gradient with a "natural gradient". Whereas a
+regular gradient is the direction of steepest ascent with respect to Euclidean
+distance, a natural gradient is a direction of steepest ascent with respect to
+a function (in particular, one we want to minimize). The intuition is that for
+a given function, some input coordinates might be more important than others,
+and this should be taken into account when considering how far away 2 points
+are.
+
+  So what do I mean "a direction of steepest ascent"?  Let's look at the
+gradient of a function as the solution to the following problem as $\epsilon
+\rightarrow 0$,
 
 $$
 \begin{align*}
@@ -404,17 +413,17 @@ $$
 \end{align*}
 $$
 
-  A "Natural Gradient" is define much the same way, but with $|| \cdot ||_2^2$
-replace with another squared norm. In our case, we're going to use the
-symmetrized KL divergence,
+  A natural gradient with respect to $L(\eta_k)$ is defined much the same way,
+but with $D_{E}(x,y) = || x-y ||_2^2$ replaced with another squared metric.
+In our case, we're going to use the symmetrized KL divergence,
 
 $$
   D_{KL}(\eta_k, \eta_k') = \text{KL} \left[ q(z_k|\eta_k) || q(z_k|\eta_k') \right]
                           + \text{KL} \left[ q(z_k|\eta_k') || q(z_k|\eta_k) \right]
 $$
 
-  Swapping the squared Euclidean norm with $D_{KL}$, we have a definition for
-the "Natural Gradient",
+  Swapping the squared Euclidean metric $D_{E}$ with $D_{KL}$, we have a
+definition for a "Natural Gradient",
 
 $$
 \begin{align*}
@@ -424,14 +433,36 @@ $$
 \end{align*}
 $$
 
-  Though I couldn't tell you why, it can be shown that if there is a matrix
-$G(\eta_k)$ such that $d \eta_k^T G(\eta_k) d \eta_k = D_{KL}(\eta_k, \eta_k
-+ d \eta_k)$, then we can relate the regular gradient and the Natural
-Gradient via $\hat{\nabla}_{\eta_k} L(\eta_k) = G(\eta_k)^{-1}
-\nabla_{\eta_k} L(\eta_k)$. So is there a $G(\eta_k)$ that satisfies this
-property? And if so, what is it?
+  While at first the gradient and natural gradient may seem difficult to
+relate, suppose that $D_{KL}(\eta_k, \eta_k + d \eta_k) = d \eta_k^T
+G(\eta_k) d \eta_k$ for some matrix $G(\eta_k)$. Then by plugging this into the
+previous optimization problem, replacing $L(\eta_k + d \eta_k)$ by its first
+order Taylor approximation (which holds when $\epsilon$ is small), and
+requiring the derivative of the problem's Lagrangian be equal to 0, we see
+that,
 
-  Let's begin by making the first-order Taylor approximation to $q(z|\eta_k + d
+$$
+\begin{align*}
+  0
+  & = \nabla_{d \eta_k} \left[
+      L(\eta_k + d \eta_k) + \lambda ( d \eta_k G(\eta_k) d \eta_k - \epsilon)
+    \right] \\
+  & \approx \nabla_{d \eta_k} \left[
+      L(\eta_k) + \nabla_{\eta_k} L(\eta_k)^T (\eta_k + d \eta_k - \eta_k) + \lambda ( d \eta_k G(\eta_k) d \eta_k - \epsilon)
+    \right] \\
+  & = \nabla_{\eta_k} L(\eta_k) + 2 \lambda G(\eta_k) d \eta_k \\
+  d \eta_k
+  & \propto G(\eta_k)^{-1} \nabla_{\eta_k} L(\eta_k)
+\end{align*}
+$$
+
+  As $\epsilon \rightarrow 0$, $d \eta_k$ becomes $\hat{\nabla}_{\eta_k}
+L(\eta_k)$, resulting in $\hat{\nabla}_{\eta_k} L(\eta_k) \propto
+G(\eta_k)^{-1} \nabla_{\eta_k} L(\eta_k)$. In other words, we can obtain
+$\hat{\nabla}_{\eta_k} L(\eta_k)$ easily if we can simply compute $G(\eta_k)$.
+Now let's derive $G(\eta_k)$.
+
+  First, let's take the first-order Taylor approximation to $q(z|\eta_k + d
 \eta_k)$ and its $\log$ about $\eta_k$,
 
 $$
@@ -470,9 +501,10 @@ $$
   Looking at the expression for $G(\eta_k)$, we can see that it is in fact the
 [Fisher Information Matrix][fisher]. Since we already assumed that
 $q(z_k|\eta_k)$ is in the exponential family, let's plug in its exponential
-form and apply the $\log$ to see that we are simply taking the covariance
-matrix of the sufficient statistics $t(z_k)$. For exponential families, this
-also happens to be the second derivative of the log normalizing constant,
+form $q(z_k|\eta_k) = h(z_k) \exp \left( \eta_k^T t(z_k) - A(\eta_k) \right)$
+and apply the $\log$ to see that we are simply taking the covariance matrix of
+the sufficient statistics $t(z_k)$. For exponential families, this also happens
+to be the second derivative of the log normalizing constant,
 
 $$
 \begin{align*}
@@ -512,20 +544,66 @@ $$
 \end{align*}
 $$
 
-  If $\alpha^{(t)} = 1$, then we get the Coordinate Ascent updates. Thus,
-Coordinate Ascent for the Variational Inference objective is identical to
-Gradient Ascent with step size 1.
+  Look at that -- $G(\eta_k^{(t)})^{-1} = (\nabla_{\eta_k}^2 A(\eta_k))^{-1}$
+perfectly cancels out $\nabla_{\eta_k}^2 A(\eta_k)$, and we're left with a
+linear combination of the old parameters and the parameters Coordinate Ascent
+would recommend. If $\alpha^{(t)} = 1$, then we just get the old Coordinate
+Ascent update!
 
+Extensions
+==========
+
+  The Variational Inference method I described here, while general in concept,
+can only easily be applied to a very particular class models -- ones where
+$P(z_k | z_{-k}, x)$ is in the exponential family. This more or less means that
+$z_k$ be a discrete variable or that $P(z_k)$ be a conjugate prior to all other
+variables depending on it.
+
+  In addition, we restricted $q(z | \eta)$ to be a mean field approximation,
+meaning that each variable is independent with its own distribution $q(z_k |
+\eta_k)$. This approximation has no hope of representing any interactions
+between variables, and perhaps surprisingly $q(z_k|\eta_k)$ does *not match the
+marginal distribution over $z_k$ at all.*  This is a common source of confusion
+for first-time users, and makes debugging Variational Inference algorithms
+rather difficult.
+
+  Third, the Coordinate Ascent algorithm described is not necessarily quick. I
+explained how Coordinate Ascent is really just Gradient Ascent on the natural
+gradient, so it's easy to ask what other methods we might be able to apply.
+
+  Here are a handful of papers that extend Variational Inference to faster
+optimization methods, different variational distribution, and non-conjugate
+models.
+
+  ["Fast Variational Inference in the Conjugate Exponential
+Family"][conjugate_gradient] -- Conjugate Gradient applied to the Marginalized
+Variational Bound. Shows that the Marginalized Variational Bound upper bounds the
+typical Variational Bound and that the former also has better curvature. That
+means second-order optimizers like Conjugate Gradient can take larger steps and
+render better performance.
+
+  ["Fixed-Form Variational Posterior Approximation through Stochastic Linear
+Regression"][fixed_form] -- fits a (potentially) non-decomposable
+exponential family distribution via Linear Regression. Involves looking at KL
+divergence between unnormalized variational distribution and joint distribution
+of model, taking derivative with respect to variational distribution's
+parameters and setting to 0, then solving for the parameters. Can be applied to
+non-conjugate models due to sampling for estimating expectations.
+
+  ["Variational Inference in Nonconjugate Models"][nonconjugate] -- Getting
+away from conjugate priors via Laplace and the Delta Method.
 
 References
 ==========
 
-  The seminal work on the Natural Gradient is due to Shunichi Amari's [Natural
-Gradient Works Efficiently in Learning][amari].
+  The seminal work on the Natural Gradient is due to Shunichi Amari's ["Natural
+Gradient Works Efficiently in Learning"][amari]. The derivation for the natural
+gradient is Theorem 1. Thanks to [Alexandre Passos][atpassos] for suggesting
+this and giving a short-hand intuition of the proof.
 
   The derivation for Variational Inference and the correspondence between
 Coordinate Ascent and Gradient Ascent is based on the introduction to Matt
-Hoffman et al.'s [Stochastic Variational Inference][hoffman].
+Hoffman et al.'s ["Stochastic Variational Inference"][hoffman].
 
 [fisher]: http://en.wikipedia.org/wiki/Fisher_information
 [natural_gradient]: http://brainandmind.wikia.com/wiki/Natural_Gradient
@@ -534,4 +612,8 @@ Hoffman et al.'s [Stochastic Variational Inference][hoffman].
 [conjugate_prior]: http://lesswrong.com/lw/5sn/the_joys_of_conjugate_priors/
 [variational_inference]: http://www.orchid.ac.uk/eprints/40/1/fox_vbtut.pdf
 [lda]: http://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf
+[conjugate_gradient]: http://books.nips.cc/papers/files/nips25/NIPS2012_1314.pdf
+[conjugate_gradient2]: http://users.ics.aalto.fi/juha/papers/nat_iconip07.pdf
+[fixed_form]: http://arxiv.org/abs/1206.6679
 [nonconjugate]: http://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf
+[atpassos]: https://twitter.com/atpassos
