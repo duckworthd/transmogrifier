@@ -616,4 +616,4 @@ Hoffman et al.'s ["Stochastic Variational Inference"][hoffman].
 [conjugate_gradient2]: http://users.ics.aalto.fi/juha/papers/nat_iconip07.pdf
 [fixed_form]: http://arxiv.org/abs/1206.6679
 [nonconjugate]: http://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf
-[atpassos]: https://twitter.com/atpassos
+[atpassos]: https://twitter.com/atpassos_ml
