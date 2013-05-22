@@ -287,25 +287,25 @@ Extensions
 ==========
 
   **Step Size** The proof above relied on a step size of $\alpha^{(t)} =
-\frac{2}{k+2}$, but as usual [Line Search][line_search] can be applied to
+\frac{2}{t+2}$, but as usual [Line Search][line_search] can be applied to
 accelerate convergence.
 
   **Approximate Linear Solutions** Though not stated in the proof above,
 another cool point about Frank-Wolfe is that you don't actually need to solve
 the linear mini-problem exactly, but you will still converge to the optimal
 solution (albet at a slightly slower rate). In particular, assume that each
-mini-problem can be solved approximately with additive error $\frac{1}{2}
-\delta C_f$,
+mini-problem can be solved approximately with additive error $\frac{\delta
+C_f}{t+2}$ at iteration $t$,
 
 $$
   \langle s^{(t+1)}, \nabla f(x^{(t)}) \rangle
-  \le \min_{s} \langle s, \nabla f(x^{(t)}) \rangle + \frac{1}{2} \delta C_f
+  \le \min_{s} \langle s, \nabla f(x^{(t)}) \rangle + \frac{\delta C_f}{t+2}
 $$
 
   then Frank-Wolfe's rate of convergence is
 
 $$
-  f(x^{(t)}) - f(x^{*}) \le \frac{2 C_f}{k+2} (1 + \delta)
+  f(x^{(t)}) - f(x^{*}) \le \frac{2 C_f}{t+2} (1 + \delta)
 $$
 
   The proof for this can be found in the supplement to [Jaggi's][jaggi2013]
@@ -315,11 +315,11 @@ Linear Invariance
 =================
 
   Another cool fact about Frank-Wolfe is that it's *linearly invariant* -- that
-is, if you rotate the space, nothing changes about the convergence rate. This
-is in directcontrast to many other methods which depend on the [condition
-number][condition_number] of a function (for functions with Hessians, this is
-the ratio between the largest and smallest eigenvalues, $\sigma_{\max} /
-\sigma_{\min})$.
+is, if you rotate and scale the space, nothing changes about the convergence
+rate. This is in direct contrast to many other methods which depend on the
+[condition number][condition_number] of a function (for functions with
+Hessians, this is the ratio between the largest and smallest eigenvalues,
+$\sigma_{\max} / \sigma_{\min})$.
 
   Suppose we transform our input space with a surjective (that is, onto) linear
 transformation $M: \hat{D} \rightarrow D$. Let's now try to solve the problem,

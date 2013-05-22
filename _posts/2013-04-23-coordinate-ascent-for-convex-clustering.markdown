@@ -41,7 +41,7 @@ $$
 \end{align*}
 $$
 
-  In 2009, [Dasgupta et al.][dasgupta] proved that solving this problem is
+  In 2009, [Aloise et al.][aloise] proved that solving this problem is
 NP-hard, meaning that short of enumerating every possible partition, we cannot
 say whether or not we've found an optimal solution $S^{*}$. In other words, we
 can approximately solve k-means, but actually solving it is very
@@ -299,6 +299,6 @@ ADMM and AMA-based algorithms specifically designed for convex clustering.
 [chi]: http://arxiv.org/abs/1304.0499
 [relax]: http://www.control.isy.liu.se/research/reports/2011/2992.pdf
 [clusterpath]: http://www.icml-2011.org/papers/419_icmlpaper.pdf
-[dasgupta]: http://dl.acm.org/citation.cfm?id=1519389
+[aloise]: http://dl.acm.org/citation.cfm?id=1519389
 [cvx]: http://cvxr.com/cvx/
 [admm]: http://www.stanford.edu/~boyd/papers/admm_distr_stats.html
